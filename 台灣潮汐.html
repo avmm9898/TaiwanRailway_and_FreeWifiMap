@@ -15,10 +15,10 @@
 	    {
 		    var ln = data.length;
 		    console.log(data);
-		    var maxy = d3.max(data, function(d){ return d.Time;});      
+		    var maxy = d3.max(data, function(d){ return d.h;});      
 		    var lines = d3.line()
                         .x(function(d,i){return i*width/ln;})
-                        .y(function(d){return height-d.Time*(height/maxy)});
+                        .y(function(d){return height-d.h*(height/maxy)});
 		    
             ctrl.append("path")
             .data([data])
