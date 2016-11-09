@@ -17,11 +17,11 @@
 		    console.log(data);
             var maxx = d3.max(data, function(d){ return d.Time;});
 		    var maxy = d3.max(data, function(d){ return d.h;});
-            var miny = d3.min(data, function(d){ return Math.abs(d.h); });
+            //var miny = d3.min(data, function(d){ return Math.abs(d.h); });
             var Y_all = maxy+miny;
 		    var lines = d3.line()
                         .x(function(d){return d.Time*width/maxx;})
-                        .y(function(d){return height-d.h*(height/Y_all)});
+                        .y(function(d){return height-d.h*(height/maxy)});
 		    
             ctrl.append("path")
             .data([data])
