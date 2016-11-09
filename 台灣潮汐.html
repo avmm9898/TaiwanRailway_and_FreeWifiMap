@@ -1,0 +1,33 @@
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title>台灣潮汐預測 新北貢寮</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+       
+    var width = 500;
+    var height = 500;
+    var ctrl = d3.select("body").append("svg").attr("width", width).attr("height", height);
+    d3.csv("./tides.csv", 
+	    function(data)
+	    {
+		    var ln = data.length;
+		    console.log(data);
+		    var maxy = d3.max(data, function(d){ return d.Time;});
+            //var miny = d3.min(data, function(d){ return Math.abs(d.h); });
+            //var Y_all = maxy+miny;
+		    var lines = d3.line()
+                        .x(function(d,i){return i*width/ln;})
+                        .y(function(d){return height-d.Time*(height/maxy)});
+		    
+            ctrl.append("path")
+            .data([data])
+            .attr("d", lines)
+            .attr("stroke", "red")
+            .attr("fill", "none");
+	    }
+    );
+    </script>
+</body>
