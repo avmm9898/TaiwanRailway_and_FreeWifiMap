@@ -7,8 +7,8 @@
 <body>
     <script type="text/javascript">
        
-    var width = 500;
-    var height = 500;
+    var width = 1024;
+    var height = 768;
     var ctrl = d3.select("body").append("svg").attr("width", width).attr("height", height);
     d3.csv("./tides.csv", 
 	    function(data)
@@ -16,11 +16,11 @@
 		    var ln = data.length;
 		    console.log(data);
 		    var maxy = d3.max(data, function(d){ return d.Time;});
-            //var miny = d3.min(data, function(d){ return Math.abs(d.h); });
-            //var Y_all = maxy+miny;
+            var miny = d3.min(data, function(d){ return Math.abs(d.h); });
+            var Y_all = maxy+miny;
 		    var lines = d3.line()
                         .x(function(d,i){return i*width/ln;})
-                        .y(function(d){return height-d.Time*(height/maxy)});
+                        .y(function(d){return height-d.Time*(height/Y_all)});
 		    
             ctrl.append("path")
             .data([data])
