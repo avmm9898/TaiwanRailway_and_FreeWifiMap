@@ -3,7 +3,7 @@ var b04611002 = function(){
     dataUrl="https://avmm9898.github.io/D3-goodman/tides.csv"
     var width = 640;
     var height = 480;
-    var ctrl = d3.select("body.content").append("svg").attr("width", width).attr("height", height);
+    var ctrl = d3.select(".content").append("svg").attr("width", width).attr("height", height);
     d3.csv(dataUrl, 
 	    function(data)
 	    {
