@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>以 D3.js 製作的臺灣人口互動統計圖及統計地圖</title>
+  <link type="text/css" rel= "stylesheet" href="https://d3js.org/d3.v4.min.js" />
+  <link type="text/css" rel= "stylesheet" href="  https://d3js.org/d3-queue.v3.min.js
+" />
+  <link type="text/css" rel= "stylesheet" href="main.css" />
+</head>
+
+<body>
+  <div id="content">
+    <h2>[年齡範圍]</h2>
+    <div class="control">
+      <div id="slider-age-span"></div>
+      <div id="slider-age-min"></div>
+    </div>
+    <p class="dummy-filler">
+    不知為什麼， 這裡如果留空， div-switcher 就會失效</p>
+
+    <div style="margin-bottom: 8px">
+    <select name="r" id="region-selection"></select>
+    從 <span id="text-age-min">20</span> 歲到
+    <span id="text-age-max">24</span> 歲人口
+    (年齡層範圍： <span id="text-age-span">5</span> 歲)
+
+    <div class="div-switch-wrapper">
+      <button class="div-switch" value="#bar-chart-panel">長條圖</button>
+      <button class="div-switch" value="#gender-plot-panel">男女人口</button>
+      <button class="div-switch active" value="#pop-map-panel">人口地圖</button>
+    </div>
+    </div>
+
+    <div id="bar-chart-panel" class="switchable-div">
+
+      <div id="bar-chart-proper">
+      </div>
+    </div>
+
+    <div id="gender-plot-panel" class="switchable-div">
+      <div id="gp-rsvg-wrapper" class="rsvg-container"> </div>
+    </div>
+
+    <div id="pop-map-panel" class= "switchable-div">
+      <div id="pm-rsvg-wrapper" class="rsvg-container"> </div>
+    </div>
+
+<svg width="300px" height="300px" 
+    xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="50" font-size="30">My SVG</text>
+  </svg>
+
+  </div>
+
+<script type="text/javascript" src="queue.js"></script>
+<script type="text/javascript" src="main.js"></script>
+</body>
+</html>

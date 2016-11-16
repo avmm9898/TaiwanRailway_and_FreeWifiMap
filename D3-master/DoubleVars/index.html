@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        d3.csv("Travels.csv", function(data) {
+        	console.log(data);
+        	var parsedCSV = d3.csv.parseRows(data);
+        	console.log(parsedCSV);
+        });
+    </script> 
+</body>
+</html>

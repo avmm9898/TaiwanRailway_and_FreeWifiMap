@@ -1,15 +1,15 @@
 <html>
   <head>
     <title>Word Cloud</title>
-    <script src="d3.js"></script>
+    <script src="d3.js" charset="utf-8"></script>
     <script src="d3.layout.cloud.js"></script>
     <script src="d3.wordcloud.js"></script>
   </head>
-<body style="text-align: center">
+  <body style="text-align: center">
     <h1>Word Cloud</h1>
-    <div id='wordcloud!!!'></div>
+    <div id='wordcloud'></div>
     <script>
-    d3.csv("./word_boygirl.txt", 
+    d3.csv("./wc.csv", 
       function(data)
       {
         d3.wordcloud()
