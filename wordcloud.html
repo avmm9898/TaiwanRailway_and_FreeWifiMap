@@ -1,9 +1,9 @@
 <html>
   <head>
-    <title>Word Cloud</title>
-    <script src="d3.js"></script>
-    <script src="d3.layout.cloud.js"></script>
-    <script src="d3.wordcloud.js"></script>
+    <title>PTT男女版都在講什麼?</title>
+    <script src="./D3-goodman/D3-master/d3.js"></script>
+    <script src="./D3-goodman/D3-master/d3.layout.cloud.js"></script>
+    <script src="./D3-goodman/D3-master/d3.wordcloud.js"></script>
   </head>
 <body style="text-align: center">
     <h1>You're so funny.</h1>
@@ -13,7 +13,7 @@
       function(data)
       {
         d3.wordcloud()
-          .size([500, 300])
+          .size([400, 400])
           .fill(d3.scale.ordinal().range(["#884400", "#448800", "#888800", "#444400"]))
           .words(data)
           .start();
