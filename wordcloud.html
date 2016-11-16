@@ -13,7 +13,7 @@
       function(data)
       {
         d3.wordcloud()
-          .size([400, 400])
+          .size([800, 400])
           .fill(d3.scale.ordinal().range(["#884400", "#448800", "#888800", "#444400"]))
           .words(data)
           .start();
