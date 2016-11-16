@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Word Cloud</title>
+    <script src="d3.js" charset="utf-8"></script>
+    <script src="d3.layout.cloud.js"></script>
+    <script src="d3.wordcloud.js"></script>
+  </head>
+<body style="text-align: center">
+    <h1>Word Cloud</h1>
+    <div id='WWWordcloud!!!'></div>
+    <script>
+    d3.csv("./boygirl.txt", 
+      function(data)
+      {
+        d3.wordcloud()
+          .size([500, 300])
+          .fill(d3.scale.ordinal().range(["#884400", "#448800", "#888800", "#444400"]))
+          .words(data)
+          .start();
+      });
+    </script>
+  </body>
+</html>
