@@ -27,9 +27,9 @@
     function initMap() {
 
       //var myLatLng = { lat: 25.043965, lng: 121.519581 };
-      var locations = new Array();
+      var locations = [];
       
-      locations[0]={ lat: 25.043965, lng: 121.519581 };
+      //locations[0]={ lat: 25.043965, lng: 121.519581 };
 
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
@@ -48,7 +48,7 @@
           if (!error) {
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d, i) {
-              locations[locations.lenth] = { lat: d.LAT, lng: d.LNG };
+              locations[i] = { lat: d.LAT, lng: d.LNG };
               // myLatLng.lat = d.LAT;
               //myLatLng.lng = d.LNG;
 
@@ -60,7 +60,7 @@
             });
           };
         });
-      locations[locations.lenth] = { lat: 25.00, lng: 121.5 };
+      //locations[1] = { lat: 25.00, lng: 121.5 };
 
       var markers = locations.map(function (location, i) {
         return new google.maps.Marker({
