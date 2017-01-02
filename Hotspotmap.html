@@ -28,7 +28,7 @@
 
       //var myLatLng = { lat: 25.043965, lng: 121.519581 };
       var locations = [];
-      
+      locations[0] = { lat: 25.043965, lng: 121.519581 };
       //locations[0]={ lat: 25.043965, lng: 121.519581 };
 
       var map = new google.maps.Map(document.getElementById('map'), {
@@ -48,9 +48,11 @@
           if (!error) {
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d, i) {
-              locations[0] = { lat: d.LAT, lng: d.LNG };
-              // myLatLng.lat = d.LAT;
-              //myLatLng.lng = d.LNG;
+              //locations[0] = { lat: d.LAT, lng: d.LNG };
+              var num = d.LAT;
+              var num1 = d.LNG
+              locations[1] = { lat: num, lng: num1 };
+
 
               /*var marker = new google.maps.Marker({
                 position: myLatLng,
@@ -58,7 +60,11 @@
                 title: 'Hello World!'
               });*/
             });
-          };
+          }
+          else {
+            alert("ERROR");
+
+          }
         });
       //locations[1] = { lat: 25.00, lng: 121.5 };
 
