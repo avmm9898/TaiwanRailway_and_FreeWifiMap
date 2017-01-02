@@ -54,8 +54,8 @@
     d3.csv("./hotspotlist.csv",
       function (data) {
         console.log(data);
-        locations.lat = function (d) { return d.LAT; };
-        locations.lng = function (d) { return d.LNG; };
+        locations.push(lat = function (d) { return d.LAT; }, lng = function (d) { return d.LNG; });
+        //locations.lng = function (d) { return d.LNG; };
       }
     );
   </script>
