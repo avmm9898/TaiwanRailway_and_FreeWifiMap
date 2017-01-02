@@ -44,11 +44,11 @@
 
       d3.csv("./tides.csv",
         function (data) {
-          var maxy = d3.max(data, function(d){ return d.h;});
+          //var maxy = d3.max(data, function(d){ return d.h;});
           //console.log(data);
           
-          myLatLng.lat = 25;
-          myLatLng.lng = 122.000;
+          myLatLng.lat = data.LAT;
+          myLatLng.lng = data.LNG;
           var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
