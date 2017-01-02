@@ -47,8 +47,8 @@
           var maxy = d3.max(data, function(d){ return d.h;});
           //console.log(data);
           
-          myLatLng.lat = maxy;
-          myLatLng.lng = maxy;
+          myLatLng.lat = 25;
+          myLatLng.lng = 122.000;
           var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
