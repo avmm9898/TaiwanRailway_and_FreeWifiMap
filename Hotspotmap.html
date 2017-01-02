@@ -26,21 +26,26 @@
   <script>
     function initMap() {
 
-      var myLatLng = { lat: 25.043965, lng: 121.519581 };
-
+      //var myLatLng = { lat: 25.043965, lng: 121.519581 };
+      var locations = [{ lat: 25.043965, lng: 121.519581 }];
 
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
-        center: myLatLng
+        center: { lat: 25.043965, lng: 121.519581 }
       });
 
-      myLatLng.lat = 25.1111;
-      myLatLng.lng = 121.5555;
-      var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: 'Hello World!'
+      var markers = locations.map(function (location, i) {
+        return new google.maps.Marker({
+          position: location,
+          //label: labels[i % labels.length]
+        });
       });
+
+      var markerCluster = new MarkerClusterer(map, markers,
+        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+
+
+
 
       d3.csv("./hotspotlist.csv")
         .row(function (d) {
@@ -53,14 +58,15 @@
           if (!error) {
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d, i) {
-              myLatLng.lat = d.LAT;
-              myLatLng.lng = d.LNG;
+              locations.push({ lat: d.LAT, lng: d.LNG });
+              // myLatLng.lat = d.LAT;
+              //myLatLng.lng = d.LNG;
 
-              var marker = new google.maps.Marker({
+              /*var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
                 title: 'Hello World!'
-              });
+              });*/
             });
           };
         });
