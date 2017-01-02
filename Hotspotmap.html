@@ -42,13 +42,13 @@
         title: 'Hello World!'
       });
 
-      d3.csv("./hotspotlist.csv",
+      d3.csv("./tides.csv",
         function (data) {
           for (var i=0;i<2;i++){
           //console.log(data);
           
-          myLatLng.lat = data[i].LAT;
-          myLatLng.lng = data[i].LNG;
+          myLatLng.lat = data[i].h;
+          myLatLng.lng = data[i].h;
           var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
