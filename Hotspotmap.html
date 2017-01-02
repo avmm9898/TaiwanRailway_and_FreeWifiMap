@@ -27,10 +27,21 @@
     function initMap() {
 
       var myLatLng = { lat: 25.043965, lng: 121.519581 };
+
+      
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         center: myLatLng
       });
+
+      myLatLng.lat = 25.1111;
+      myLatLng.lng = 121.5555;
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: 'Hello World!'
+      });
+      
       d3.csv("./hotspotlist.csv",
         function (data) {
           console.log(data);
