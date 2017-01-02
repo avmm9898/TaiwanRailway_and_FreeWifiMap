@@ -41,12 +41,14 @@
         map: map,
         title: 'Hello World!'
       });
-      
+
       d3.csv("./hotspotlist.csv",
         function (data) {
           console.log(data);
-          myLatLng.lat = function (d) { return d.LAT; };
-          myLatLng.lng = function (d) { return d.LNG; };
+          var num1=function (d) { return d.LAT; };
+          var num2=function (d) { return d.LNG; }
+          myLatLng.lat = num1;
+          myLatLng.lng = num2;
           var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
