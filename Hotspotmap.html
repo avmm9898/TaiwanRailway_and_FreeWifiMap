@@ -28,7 +28,7 @@
 
       var myLatLng = { lat: 25.043965, lng: 121.519581 };
 
-      
+
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         center: myLatLng
@@ -42,23 +42,29 @@
         title: 'Hello World!'
       });
 
-      d3.csv("./hotspotlist.csv",
-        function (data) {
-          //var maxy = d3.max(data, function(d){ return d.h;});
-          //console.log(data);
-          
-          myLatLng.lat = data.LAT;
-          myLatLng.lng = data.LNG;
-          var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'Hello World!'
-          });
+      d3.csv("./hotspotlist.csv")
+        .row(function (d) {
+          return {
+            LAT: +d.LAT,
+            LNG: +d.LNG
+          };
+        })
+        .get(function (error, csv) {
+          if (!error) {
+            // lets say you want to log all the temperatures to the console
+            csv.forEach(function (d, i) {
+              myLatLng.lat = d.LAT;
+              myLatLng.lng = d.LNG;
 
-        
-        });
+              var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Hello World!'
+              });
+            });
 
-    };
+          };
+        }
     /*function initMap() {
 
       var map = new google.maps.Map(document.getElementById('map'), {
