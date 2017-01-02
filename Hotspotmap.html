@@ -58,7 +58,7 @@
           if (!error) {
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d, i) {
-              locations.push({ lat: d.LAT, lng: d.LNG });
+              locations[locations.lenth] = { lat: d.LAT, lng: d.LNG };
               // myLatLng.lat = d.LAT;
               //myLatLng.lng = d.LNG;
 
