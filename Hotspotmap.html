@@ -5,6 +5,7 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <title>Marker Clustering</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -49,11 +50,10 @@
       var markerCluster = new MarkerClusterer(map, markers,
         { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
     }
-
+    var locations = [{ lat: 25.043965, lng: 121.519581 }];
     d3.csv("./hotspotlist.csv",
       function (data) {
         console.log(data);
-        var locations = [{ lat: 25.043965, lng: 121.519581 }];
         location[locations.lenth].lat = function (d) { return d.LAT; };
         location[locations.lenth].lng = function (d) { return d.LNG; };
       }
@@ -63,7 +63,7 @@
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&callback=initMap">
 </script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+
 </body>
 
 </html>
