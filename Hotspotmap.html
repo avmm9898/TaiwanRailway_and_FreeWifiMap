@@ -52,7 +52,7 @@
               //locations[0] = { lat: d.LAT, lng: d.LNG };
               num = d.LAT;
               num1 = d.LNG;
-              locations[1] = { lat: num, lng: num1 };
+              locations[i] = { lat: num, lng: num1 };
 
 
               /*var marker = new google.maps.Marker({
@@ -68,7 +68,7 @@
           }
         });
       //locations[1] = { lat: 25.00, lng: 121.5 };
-      alert(num);
+      //alert(num);
       var markers = locations.map(function (location, i) {
         return new google.maps.Marker({
           position: location,
