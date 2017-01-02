@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Marker Clustering</title>
-    <style>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Marker Clustering</title>
+  <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
@@ -17,45 +18,52 @@
         padding: 0;
       }
     </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
+</head>
 
-      function initMap() {
+<body>
+  <div id="map"></div>
+  <script>
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 6,
-          center: {lat: 25.043965, lng: 121.519581}
+    function initMap() {
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 6,
+        center: { lat: 25.043965, lng: 121.519581 }
+      });
+
+      // Create an array of alphabetical characters used to label the markers.
+      var labels = '◎';
+
+      // Add some markers to the map.
+      // Note: The code uses the JavaScript Array.prototype.map() method to
+      // create an array of markers based on a given "locations" array.
+      // The map() method here has nothing to do with the Google Maps API.
+      var markers = locations.map(function (location, i) {
+        return new google.maps.Marker({
+          position: location,
+          label: labels[i % labels.length]
         });
+      });
 
-        // Create an array of alphabetical characters used to label the markers.
-        var labels = '.';
+      // Add a marker clusterer to manage the markers.
+      var markerCluster = new MarkerClusterer(map, markers,
+        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+    }
 
-        // Add some markers to the map.
-        // Note: The code uses the JavaScript Array.prototype.map() method to
-        // create an array of markers based on a given "locations" array.
-        // The map() method here has nothing to do with the Google Maps API.
-        var markers = locations.map(function(location, i) {
-          return new google.maps.Marker({
-            position: location,
-            label: labels[i % labels.length]
-          });
-        });
-
-        // Add a marker clusterer to manage the markers.
-        var markerCluster = new MarkerClusterer(map, markers,
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    d3.csv("./hotspotlist.csv",
+      function (data) {
+        console.log(data);
+        var locations = [{ lat: 25.043965, lng: 121.519581 }];
+        location[locations.lenth].lat = function (d) { return d.LAT; };
+        location[locations.lenth].lng = function (d) { return d.LNG; };
       }
-      var locations = [
-        {lat: 25.043965, lng: 121.519581},
-        {lat: 25.03717, lng: 121.516567},
-      ]
-    </script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&callback=initMap">
-    </script>
-  </body>
+    );
+  </script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&callback=initMap">
+</script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</body>
+
 </html>
