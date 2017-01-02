@@ -34,18 +34,6 @@
         center: { lat: 25.043965, lng: 121.519581 }
       });
 
-      var markers = locations.map(function (location, i) {
-        return new google.maps.Marker({
-          position: location,
-          //label: labels[i % labels.length]
-        });
-      });
-
-      var markerCluster = new MarkerClusterer(map, markers,
-        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-
-
-
 
       d3.csv("./hotspotlist.csv")
         .row(function (d) {
@@ -70,6 +58,17 @@
             });
           };
         });
+
+
+      var markers = locations.map(function (location, i) {
+        return new google.maps.Marker({
+          position: location,
+          //label: labels[i % labels.length]
+        });
+      });
+
+      var markerCluster = new MarkerClusterer(map, markers,
+        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
     }
     /*function initMap() {
 
