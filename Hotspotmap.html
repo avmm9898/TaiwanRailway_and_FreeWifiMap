@@ -28,6 +28,7 @@
 
       //var myLatLng = { lat: 25.043965, lng: 121.519581 };
       var locations = [];
+      var markers=[];
       locations[0] = { lat: 25.043965, lng: 121.519581 };
       //locations[0]={ lat: 25.043965, lng: 121.519581 };
 
@@ -44,7 +45,7 @@
             LNG: +d.LNG
           };
         })
-        .get(function runloc(error, csv) {
+        .get(function (error, csv) {
           if (!error) {
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d, i) {
@@ -53,24 +54,20 @@
               //alert(d.LNG);
               //locations[i] = { lat: num, lng: num1 };
               //alert(i);
-              if (i = 9856) {
-                var markers = locations.map(function (location, i) {
-                  return new google.maps.Marker({
-                    position: location,
-                    //label: labels[i % labels.length]
-                  });
+
+              /*var markers = locations.map(function (location, i) {
+                return new google.maps.Marker({
+                  position: location,
+                  //label: labels[i % labels.length]
                 });
-                var markerCluster = new MarkerClusterer(map, markers,
-                  { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+              });*/
 
-              };
-
-
-              /*var marker = new google.maps.Marker({
+              var marker = new google.maps.Marker({
                 position: locations[i],
                 map: map,
                 title: 'Hello World!'
-              });*/
+              });
+              markers.push(marker);
             });
           }
           else {
@@ -79,6 +76,8 @@
           }
         });
       //locations[1] = { lat: 25.00, lng: 121.5 };
+      var markerCluster = new MarkerClusterer(map, marker,
+        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
 
 
     }
