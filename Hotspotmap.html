@@ -316,13 +316,33 @@
     ];
 
     //var styledMapType = new google.maps.StyledMapType(d_style, { name: 'Styled Map' });
-
+    var a_styles = [
+      {
+        featureType: "all",
+        stylers: [
+          { saturation: -80 }
+        ]
+      }, {
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [
+          { hue: "#00ffee" },
+          { saturation: 50 }
+        ]
+      }, {
+        featureType: "poi.business",
+        elementType: "labels",
+        stylers: [
+          { visibility: "off" }
+        ]
+      }
+    ]
 
 
     var mapOptions = {
       zoom: 4,
       center: { lat: 25.043965, lng: 121.519581 },
-      styles: d_styles
+      styles: a_styles
     };
     //map.mapTypes.set('map_style', styledMap);
     //map.setMapTypeId('map_style');
