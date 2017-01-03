@@ -346,7 +346,13 @@
     };
     //map.mapTypes.set('map_style', styledMap);
     //map.setMapTypeId('map_style');
+    var input = document.getElementById('searchTextField');
+    var options = {
+      types: ['(cities)'],
+      componentRestrictions: { country: 'tw' }
+    };
 
+    autocomplete = new google.maps.places.Autocomplete(input, options);
     function initMap() {
 
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
