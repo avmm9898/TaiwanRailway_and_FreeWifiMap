@@ -315,20 +315,17 @@
       }
     ];
 
-    var styledMapType = new google.maps.StyledMapType(d_style, { name: 'Styled Map' });
+    //var styledMapType = new google.maps.StyledMapType(d_style, { name: 'Styled Map' });
 
 
 
     var mapOptions = {
       zoom: 4,
       center: { lat: 25.043965, lng: 121.519581 },
-      mapTypeControlOptions: {
-        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
-          'styled_map']
-      }
+      styles: d_styles
     };
-    map.mapTypes.set('map_style', styledMap);
-    map.setMapTypeId('map_style');
+    //map.mapTypes.set('map_style', styledMap);
+    //map.setMapTypeId('map_style');
 
     function initMap() {
 
