@@ -63,43 +63,12 @@
         width: 345px;
       }
     </style>
-
 </head>
 
 <body>
-  <input id="pac-input" class="controls" type="text" placeholder="Search iTaiwan nearby">
+  <input id="pac-input" class="controls" type="text" placeholder="Search location">
   <div id="map"></div>
   <script>
-
-    /*
-     $(document).ready(function () {
-       $.ajax({
-         type: "GET",
-         url: "https://avmm9898.github.io/D3-goodman/hotspotlist.csv",
-         dataType: "text",
-         success: function (data) { processData(data); }
-       });
-     });
- 
-     function processData(allText) {
-       var allTextLines = allText.split(/\r\n|\n/);
-       var headers = allTextLines[0].split(',');
-       var lines = [];
- 
-       for (var i = 1; i < allTextLines.length; i++) {
-         var data = allTextLines[i].split(',');
-         if (data.length == headers.length) {
- 
-           var tarr = [];
-           for (var j = 0; j < headers.length; j++) {
-             tarr.push(headers[j] + ":" + data[j]);
-           }
-           lines.push(tarr);
-         }
-       }
-       // alert(lines);
-     }
- */
 
     var d_styles = [
       {
@@ -383,7 +352,6 @@
         ]
       }
     ]
-    var mapstate = 2;
 
 
     // Set CSS for the control border.
@@ -393,9 +361,9 @@
     controlUI.style.borderRadius = '3px';
     controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
     controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '22px';
+    controlUI.style.marginBottom = '18px';
     controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to recenter the map';
+    controlUI.title = 'Click to change the map';
     var controlDiv = document.createElement('div');
     controlDiv.appendChild(controlUI);
 
@@ -403,15 +371,47 @@
     var controlText = document.createElement('div');
     controlText.style.color = 'rgb(25,25,25)';
     controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = 'Map';
+    controlText.style.fontSize = '14px';
+    controlText.style.lineHeight = '25px';
+    controlText.style.paddingLeft = '3px';
+    controlText.style.paddingRight = '3px';
+    controlText.innerHTML = 'Hotspots/Charge Stations';
     controlUI.appendChild(controlText);
 
+    var markersA = [];
+    var markersB = [];
 
-    function readcsv1(wifiimage, map) {
+    
+    var map;
+    var markerClusterA;
+    var markerClusterB;
+
+    function addMarker(location, Name, Address, image, s) {
+      var marker = new google.maps.Marker({
+        position: location,
+        icon: image,
+        title: Name,
+        map: map
+      });
+      var contentString =
+        '<div id="content">' + '<div id="siteNotice">' + '</div>' +
+        '<h2 id="firstHeading" class="firstHeading">' + Name + '</h2>' +
+        '<div id="bodyContent">' + Address + '</div>' +
+        '</div>';
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString,
+      });
+      marker.addListener('click', function () {
+        infowindow.open(map, marker);
+      });
+      if (s == 1)
+        markersA.push(marker);
+      else if (s == 2)
+        markersB.push(marker);
+    }
+
+
+    function readcsv1(image, map) {
       d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
         .row(function (d) {
           return {
@@ -423,48 +423,24 @@
         })
         .get(function (error, csv) {
           if (!error) {
-            var markers = [];
+            //var markers = [];
             // lets say you want to log all the temperatures to the console
+
             csv.forEach(function (d) {
-              var locations = { lat: d.LAT, lng: d.LNG };
-              var contentString =
-                '<div id="content">' + '<div id="siteNotice">' + '</div>' +
-                '<h2 id="firstHeading" class="firstHeading">' + d.Name + '</h2>' +
-                '<div id="bodyContent">' + d.Address + '</div>' +
-                '</div>';
+              var location = { lat: d.LAT, lng: d.LNG };
+              var s = 1;
+              addMarker(location, d.Name, d.Address, image, s);
 
-              var marker = new google.maps.Marker({
-                position: locations,
-                icon: wifiimage,
-                title: d.Name
-              });
-              var infowindow = new google.maps.InfoWindow({
-                content: contentString,
-              });
-              marker.addListener('click', function () {
-                infowindow.open(map, marker);
-              });
-
-              markers.push(marker);
             });
-            var markerCluster = new MarkerClusterer(map, markers,
-              { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-            /*if (mapstate == 2) {
-              for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(null);
-              }
-
-            }*/
-
           }
-
           else {
             alert("ERROR");
           }
+          setMapnull();
         });
-    };
+    }
 
-    function readcsv2(wifiimage, map) {
+    function readcsv2(image) {
       d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list.csv")
         .row(function (d) {
           return {
@@ -476,44 +452,31 @@
         })
         .get(function (error, csv) {
           if (!error) {
-            var markers = [];
+            //var markers = [];
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d) {
-              var locations = { lat: d.LAT, lng: d.LNG };
-              var contentString =
-                '<div id="content">' + '<div id="siteNotice">' + '</div>' +
-                '<h2 id="firstHeading" class="firstHeading">' + d.Name + '</h2>' +
-                '<div id="bodyContent">' + d.Address + '</div>' +
-                '</div>';
-
-              var marker = new google.maps.Marker({
-                position: locations,
-                icon: wifiimage,
-                title: d.Name
-              });
-              var infowindow = new google.maps.InfoWindow({
-                content: contentString,
-              });
-              marker.addListener('click', function () {
-                infowindow.open(map, marker);
-              });
-
-              markers.push(marker);
+              var location = { lat: d.LAT, lng: d.LNG };
+              var s = 2;
+              addMarker(location, d.Name, d.Address, image, s);
             });
-            var markerCluster = new MarkerClusterer(map, markers,
-              { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-
-
           }
           else {
             alert("ERROR");
           }
-        });
+          setMapnull();
 
+        });
+    }
+    function setMapnull() {
+      for (var i = 0; i < markersA.length; i++) {
+        markersA[i].setMap(null);
+      }
+      for (var i = 0; i < markersB.length; i++) {
+        markersB[i].setMap(null);
+      }
     }
 
-
-    function cSearchBox(map) {
+    function cSearchBox() {
       var input = document.getElementById('pac-input');
       var searchBox = new google.maps.places.SearchBox(input);
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -570,21 +533,40 @@
       });
     };
 
-
     var BOX = 1;
+
 
     function initMap() {
       // Setup the click event listeners: simply set the map to Chicago.
+      var clearMarkerscount = 2;
+      var mapstate = 1;
       controlUI.addEventListener('click', function () {
+
         if (mapstate == 1) {
+          
+
           mapstate = 2;
+          markerClusterB = new MarkerClusterer(map, markersB,
+            { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+          alert("You're going to the charge stations map.");
         }
-        else { mapstate = 1; };
-        initMap();
+        else if (mapstate == 2) {
+          markerClusterB.clearMarkers();
+          mapstate = 3;
+          markerClusterA = new MarkerClusterer(map, markersA,
+            { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+          alert("You're going to the hotsopts(iTaiwan) map.");
+        }
+        else if (mapstate == 3) {
+          markerClusterA.clearMarkers();
+          mapstate = 1;
+        alert("You're going to the original map.");
+        };
+
       });
 
 
-      // alert("1");
+
       var customMapType1 = new google.maps.StyledMapType(a_styles, {
         name: '簡化地圖(鐵灰)'
       });
@@ -603,7 +585,7 @@
         }
       };
 
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      map = new google.maps.Map(document.getElementById('map'), mapOptions);
       map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);  //增加按鈕
 
       //設定地圖種類
@@ -611,30 +593,28 @@
       map.mapTypes.set(customMapTypeId2, customMapType2);
       map.setMapTypeId(customMapTypeId1);
 
-
-
       var wifiimage = {
         url: './iTaiwan.png',
         size: new google.maps.Size(37, 29),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(18.5, 29)
       };
-
-      if (mapstate == 1) {
-        readcsv1(wifiimage, map);
-        alert(mapstate);
-      }
-      else if (mapstate == 2) {
-        readcsv2(wifiimage, map);
-        alert(mapstate);
-      }
+      var chargeimage = {
+        url: './power.png',
+        size: new google.maps.Size(30, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 30)
+      };
 
 
       if (BOX == 1) {
-        cSearchBox(map);
+        cSearchBox();
       }
       BOX = 2;
-
+      readcsv1(wifiimage, map);
+      readcsv2(chargeimage, map);
+      markerClusterA = new MarkerClusterer(map, markersA);
+      markerClusterB = new MarkerClusterer(map, markersB);
 
       // [END region_getplaces]
     }

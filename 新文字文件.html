@@ -1,55 +1,145 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-  <title>document.createElement</title>
-  <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-  <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
-  <META HTTP-EQUIV="Expires" CONTENT="0">
-  <meta charset="utf-8">
+  <title>Remove Markers</title>
   <style>
-.testClass{font-size:9pt;background-color :#f0f0f0 }
-</style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+    </style>
 </head>
 
 <body>
-  <script>
-  //.........................建立input
-  dc_input = document.createElement("input");
-  dc_input.type = 'text';
-  dc_input.size = 50;
-  dc_input.className = 'testClass'
-  dc_input.value = '動態建立html元素-input';
-  //dc_input.onmouseover=showColor;
-  //dc_input.onmouseout=backColor;
-  document.body.appendChild(dc_input);
+  <div id="floating-panel">
+    <input onclick="clearMarkers();" type=button value="Hide Markers">
+<input onclick="showMarkers();" type=button value="Show All Markers">
+<input onclick="deleteMarkers();" type=button value="Delete Markers">
+</div>
+<div id="map"></div>
+<p>Click on the map to add markers.</p>
+<script>
 
-  //.........................建立div (並且加入滑鼠事件)
-  var newElement = document.createElement('div');
-  var newText = document.createTextNode('動態建立html元素-div (新建立標籤div中的文字)');
-  newElement.id = 'new_div';
-  newElement.className = 'testClass';
-  newElement.setAttribute('name ', 'newDivName');
-  newElement.style.width = '280px';
-  newElement.style.height = '200px';
-  newElement.style.margin = '0 auto';
-  newElement.style.border = '1px solid #DDD';
+                // In the following example, markers appear when the user clicks on the map.
+                // The markers are stored in an array.
+                // The user can then click an option to hide, show or delete the markers.
+                var map;
+                var markers = [];
+                var markerCluster;
+                function initMap() {
 
-  newElement.onmouseover = showColor;
-  newElement.onmouseout = backColor;
-  newElement.appendChild(newText);
-  document.body.appendChild(newElement);
+                  var haightAshbury = { lat: 23.80233, lng: 121.03276 };
 
-  //當滑鼠經過div區塊,底色變成淺紫色
-  function showColor() {
-    this.style.cursor = 'hand';
-    this.mark = this.style.backgroundColor; //記錄原本顏色
-    this.style.backgroundColor = "plum";
-  }
-  //當滑鼠離開div區塊,底色變回原本顏色
-  function backColor() {
-    this.style.backgroundColor = this.mark;
-  }
+                  map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 12,
+                    center: haightAshbury,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN
+                  });
+                  //markerCluster = new MarkerClusterer(map, markers);
+
+                  // This event listener will call addMarker() when the map is clicked.
+                  /*map.addListener('click', function (event) {
+                    addMarker(event.latLng);
+                  });
+
+                  // Adds a marker at the center of the map.
+                  addMarker(haightAshbury);*/
+                  readcsv1();
+
+                }
+
+                // Adds a marker to the map and push to the array.
+                function addMarker(location) {
+                  var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                  });
+                  markers.push(marker);
+                }
+                function readcsv1() {
+                  d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
+                    .row(function (d) {
+                      return {
+                        LAT: +d.LAT,
+                        LNG: +d.LNG,
+                        Address: d.address,
+                        Name: d.name
+                      }
+                    })
+                    .get(function (error, csv) {
+                      if (!error) {
+                        //var markers = [];
+                        // lets say you want to log all the temperatures to the console
+
+                        csv.forEach(function (d) {
+                          var location = { lat: d.LAT, lng: d.LNG };
+                          addMarker(location);
+                        });
+                      }
+                      else {
+                        alert("ERROR");
+                      }
+                      markerCluster = new MarkerClusterer(map, markers,
+                        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+
+                    });
+                }
+
+
+
+
+                // Sets the map on all markers in the array.
+                function setMapOnAll(map) {
+                  for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                  }
+                  alert(markers.length);
+                }
+
+                // Removes the markers from the map, but keeps them in the array.
+                function clearMarkers() {
+                  setMapOnAll(null);
+
+                }
+
+                // Shows any markers currently in the array.
+                function showMarkers() {
+                  //setMapOnAll(map);
+                  markerCluster = new MarkerClusterer(map, markers,
+                    { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+
+                }
+
+                // Deletes all markers in the array by removing references to them.
+                function deleteMarkers() {
+                  markerCluster.clearMarkers();
+                  /*clearMarkers();
+                  markers = [];*/
+                }
+
 </script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&signed_in=true&callback=initMap"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 </body>
 
 </html>
