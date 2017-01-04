@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <title>Marker Clustering</title>
+  <title>台灣充電站及公共WIFI地圖</title>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
       /* Always set the map height explicitly to define the size of the div
@@ -548,19 +548,19 @@
           mapstate = 2;
           markerClusterB = new MarkerClusterer(map, markersB,
             { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-          alert("You're going to the charge stations map.");
+         // alert("You're going to the charge stations map.");
         }
         else if (mapstate == 2) {
           markerClusterB.clearMarkers();
           mapstate = 3;
           markerClusterA = new MarkerClusterer(map, markersA,
             { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-          alert("You're going to the hotsopts(iTaiwan) map.");
+          //alert("You're going to the hotsopts(iTaiwan) map.");
         }
         else if (mapstate == 3) {
           markerClusterA.clearMarkers();
           mapstate = 1;
-        alert("You're going to the original map.");
+        //alert("You're going to the original map.");
         };
 
       });
@@ -594,13 +594,13 @@
       map.setMapTypeId(customMapTypeId1);
 
       var wifiimage = {
-        url: './iTaiwan.png',
+        url: 'https://avmm9898.github.io/D3-goodman/iTaiwan.png',
         size: new google.maps.Size(37, 29),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(18.5, 29)
       };
       var chargeimage = {
-        url: './power.png',
+        url: 'https://avmm9898.github.io/D3-goodman/power.png',
         size: new google.maps.Size(30, 30),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(15, 30)
@@ -616,12 +616,7 @@
       markerClusterA = new MarkerClusterer(map, markersA);
       markerClusterB = new MarkerClusterer(map, markersB);
 
-      // [END region_getplaces]
     }
-
-
-
-
 
 
 
