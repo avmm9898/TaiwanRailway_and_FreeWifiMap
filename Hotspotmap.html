@@ -11,7 +11,46 @@
        * element that contains the map. */
       #map {
         height: 100%;
+      }.controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+      border-radius: 2px 0 0 2px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      height: 29px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
+
+      #pac-input {
+      background-color: #fff;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      margin-left: 12px;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 300px;
+      }
+
+      #pac-input:focus {
+      border-color: #4d90fe;
+      }.pac-container {
+      font-family: Roboto;
+      }
+
+      #type-selector {
+      color: #fff;
+      background-color: #4d90fe;
+      padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 300;
+      }
+
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
@@ -19,9 +58,16 @@
         padding: 0;
       }
     </style>
+<style>
+      #target {
+        width: 345px;
+      }
+    </style>
+
 </head>
 
 <body>
+  <input id="pac-input" class="controls" type="text" placeholder="Search iTaiwan nearby">
   <div id="map"></div>
   <script>
 
@@ -315,7 +361,7 @@
       }
     ];
 
-    //var styledMapType = new google.maps.StyledMapType(d_style, { name: 'Styled Map' });
+
     var a_styles = [
       {
         featureType: "all",
@@ -337,32 +383,42 @@
         ]
       }
     ]
+    var mapstate = 2;
 
 
-    var mapOptions = {
-      zoom: 6,
-      center: { lat: 23.80233, lng: 121.03276 },
-      styles: a_styles
-    };
-    //map.mapTypes.set('map_style', styledMap);
-    //map.setMapTypeId('map_style');
-    var input = document.getElementById('searchTextField');
-    var options = {
-      types: ['(cities)'],
-      componentRestrictions: { country: 'tw' }
-    };
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '3px';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.title = 'Click to recenter the map';
+    var controlDiv = document.createElement('div');
+    controlDiv.appendChild(controlUI);
 
-    autocomplete = new google.maps.places.Autocomplete(input, options);
-    function initMap() {
+    // Set CSS for the control interior.
+    var controlText = document.createElement('div');
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '16px';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '5px';
+    controlText.style.paddingRight = '5px';
+    controlText.innerHTML = 'Map';
+    controlUI.appendChild(controlText);
 
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+    function readcsv1(wifiimage, map) {
       d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
         .row(function (d) {
           return {
             LAT: +d.LAT,
             LNG: +d.LNG,
-            Address: d.address
+            Address: d.address,
+            Name: d.name
           }
         })
         .get(function (error, csv) {
@@ -371,14 +427,19 @@
             // lets say you want to log all the temperatures to the console
             csv.forEach(function (d) {
               var locations = { lat: d.LAT, lng: d.LNG };
-              var contentString = d.Address;
+              var contentString =
+                '<div id="content">' + '<div id="siteNotice">' + '</div>' +
+                '<h2 id="firstHeading" class="firstHeading">' + d.Name + '</h2>' +
+                '<div id="bodyContent">' + d.Address + '</div>' +
+                '</div>';
 
               var marker = new google.maps.Marker({
                 position: locations,
+                icon: wifiimage,
+                title: d.Name
               });
               var infowindow = new google.maps.InfoWindow({
                 content: contentString,
-                maxWidth: 200
               });
               marker.addListener('click', function () {
                 infowindow.open(map, marker);
@@ -388,18 +449,210 @@
             });
             var markerCluster = new MarkerClusterer(map, markers,
               { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+            /*if (mapstate == 2) {
+              for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+              }
+
+            }*/
+
           }
 
           else {
             alert("ERROR");
           }
         });
+    };
+
+    function readcsv2(wifiimage, map) {
+      d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list.csv")
+        .row(function (d) {
+          return {
+            LAT: +d.LAT,
+            LNG: +d.LNG,
+            Address: d.address,
+            Name: d.name
+          }
+        })
+        .get(function (error, csv) {
+          if (!error) {
+            var markers = [];
+            // lets say you want to log all the temperatures to the console
+            csv.forEach(function (d) {
+              var locations = { lat: d.LAT, lng: d.LNG };
+              var contentString =
+                '<div id="content">' + '<div id="siteNotice">' + '</div>' +
+                '<h2 id="firstHeading" class="firstHeading">' + d.Name + '</h2>' +
+                '<div id="bodyContent">' + d.Address + '</div>' +
+                '</div>';
+
+              var marker = new google.maps.Marker({
+                position: locations,
+                icon: wifiimage,
+                title: d.Name
+              });
+              var infowindow = new google.maps.InfoWindow({
+                content: contentString,
+              });
+              marker.addListener('click', function () {
+                infowindow.open(map, marker);
+              });
+
+              markers.push(marker);
+            });
+            var markerCluster = new MarkerClusterer(map, markers,
+              { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+
+
+          }
+          else {
+            alert("ERROR");
+          }
+        });
+
     }
+
+
+    function cSearchBox(map) {
+      var input = document.getElementById('pac-input');
+      var searchBox = new google.maps.places.SearchBox(input);
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener('bounds_changed', function () {
+        searchBox.setBounds(map.getBounds());
+      });
+
+      var markers1 = [];
+      // [START region_getplaces]
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener('places_changed', function () {
+        var places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers1.forEach(function (marker1) {
+          marker1.setMap(null);
+        });
+        markers1 = [];
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function (place) {
+          var icon = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+          };
+
+          // Create a marker for each place.
+          markers1.push(new google.maps.Marker({
+            map: map,
+            icon: icon,
+            title: place.name,
+            position: place.geometry.location
+          }));
+
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      });
+    };
+
+
+    var BOX = 1;
+
+    function initMap() {
+      // Setup the click event listeners: simply set the map to Chicago.
+      controlUI.addEventListener('click', function () {
+        if (mapstate == 1) {
+          mapstate = 2;
+        }
+        else { mapstate = 1; };
+        initMap();
+      });
+
+
+      // alert("1");
+      var customMapType1 = new google.maps.StyledMapType(a_styles, {
+        name: '簡化地圖(鐵灰)'
+      });
+      var customMapTypeId1 = 'custom_style1';
+
+      var customMapType2 = new google.maps.StyledMapType(d_styles, {
+        name: '簡化地圖(暖綠)'
+      });
+      var customMapTypeId2 = 'custom_style2';
+
+      var mapOptions = {
+        zoom: 6,
+        center: { lat: 23.80233, lng: 121.03276 },
+        mapTypeControlOptions: {
+          mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId1, customMapTypeId2, google.maps.MapTypeId.SATELLITE]
+        }
+      };
+
+      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);  //增加按鈕
+
+      //設定地圖種類
+      map.mapTypes.set(customMapTypeId1, customMapType1);
+      map.mapTypes.set(customMapTypeId2, customMapType2);
+      map.setMapTypeId(customMapTypeId1);
+
+
+
+      var wifiimage = {
+        url: './iTaiwan.png',
+        size: new google.maps.Size(37, 29),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(18.5, 29)
+      };
+
+      if (mapstate == 1) {
+        readcsv1(wifiimage, map);
+        alert(mapstate);
+      }
+      else if (mapstate == 2) {
+        readcsv2(wifiimage, map);
+        alert(mapstate);
+      }
+
+
+      if (BOX == 1) {
+        cSearchBox(map);
+      }
+      BOX = 2;
+
+
+      // [END region_getplaces]
+    }
+
+
+
+
+
+
+
+
   </script>
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&callback=initMap">
-</script>
+
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&libraries=places&callback=initMap"
+  async defer></script>
+
 
 </body>
 

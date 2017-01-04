@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <title>document.createElement</title>
+  <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+  <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+  <META HTTP-EQUIV="Expires" CONTENT="0">
+  <meta charset="utf-8">
+  <style>
+.testClass{font-size:9pt;background-color :#f0f0f0 }
+</style>
+</head>
+
+<body>
+  <script>
+  //.........................建立input
+  dc_input = document.createElement("input");
+  dc_input.type = 'text';
+  dc_input.size = 50;
+  dc_input.className = 'testClass'
+  dc_input.value = '動態建立html元素-input';
+  //dc_input.onmouseover=showColor;
+  //dc_input.onmouseout=backColor;
+  document.body.appendChild(dc_input);
+
+  //.........................建立div (並且加入滑鼠事件)
+  var newElement = document.createElement('div');
+  var newText = document.createTextNode('動態建立html元素-div (新建立標籤div中的文字)');
+  newElement.id = 'new_div';
+  newElement.className = 'testClass';
+  newElement.setAttribute('name ', 'newDivName');
+  newElement.style.width = '280px';
+  newElement.style.height = '200px';
+  newElement.style.margin = '0 auto';
+  newElement.style.border = '1px solid #DDD';
+
+  newElement.onmouseover = showColor;
+  newElement.onmouseout = backColor;
+  newElement.appendChild(newText);
+  document.body.appendChild(newElement);
+
+  //當滑鼠經過div區塊,底色變成淺紫色
+  function showColor() {
+    this.style.cursor = 'hand';
+    this.mark = this.style.backgroundColor; //記錄原本顏色
+    this.style.backgroundColor = "plum";
+  }
+  //當滑鼠離開div區塊,底色變回原本顏色
+  function backColor() {
+    this.style.backgroundColor = this.mark;
+  }
+</script>
+</body>
+
+</html>
