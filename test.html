@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>台灣充電站及公共WIFI地圖</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      
+
+      #pac-input {
+      background-color: #fff;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      margin-left: 12px;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 300px;
+      }
+
+      #pac-input:focus {
+      border-color: #4d90fe;
+      }.pac-container {
+      font-family: Roboto;
+      }
+
+      #type-selector {
+      color: #fff;
+      background-color: #4d90fe;
+      padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 300;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+</head>
+
+<body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search location">
+    
+    <script>
+
+        var d_styles = [
+            {
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#ebe3cd"
+                    }
+                ]
+            },
+            {
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#523735"
+                    }
+                ]
+            },
+            {
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#f5f1e6"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#c9b2a6"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.land_parcel",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#dcd2be"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.land_parcel",
+                "elementType": "labels",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.land_parcel",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#ae9e90"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape.natural",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "labels.text",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#93817c"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.business",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#a5b076"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "labels.text",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#447530"
+                    }
+                ]
+            },
+            {
+                "featureType": "road",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#f5f1e6"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#fdfcf8"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#f8c967"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#e9bc62"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway.controlled_access",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#e98d58"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway.controlled_access",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#db8555"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "labels",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#806b63"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#8f7d77"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#ebe3cd"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.station",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#b9d3c2"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#92998d"
+                    }
+                ]
+            }
+        ];
+
+
+        var a_styles = [
+            {
+                featureType: "all",
+                stylers: [
+                    { saturation: -80 }
+                ]
+            }, {
+                featureType: "road.arterial",
+                elementType: "geometry",
+                stylers: [
+                    { hue: "#00ffee" },
+                    { saturation: 50 }
+                ]
+            }, {
+                featureType: "poi.business",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
+        var cssmap = document.createElement('div');
+        cssmap.id='map';
+        cssmap.style.height = '100%';
+        //cssmap.className = 'controls';
+        cssmap.setAttribute("controls", "margin-top: 10px;");
+        cssmap.setAttribute("controls", "border: 1px solid transparent;");
+        cssmap.setAttribute("controls", "border-radius: 2px 0 0 2px;");
+        cssmap.setAttribute("controls", "box-sizing: border-box;");
+        cssmap.setAttribute("controls", "-moz-box-sizing: border-box;");
+        cssmap.setAttribute("controls", "height: 29px;");
+        cssmap.setAttribute("controls", "box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);");
+        cssmap.setAttribute("controls", "outline: none;");
+        var cssmapDiv = document.createElement('div');
+        cssmapDiv.appendChild(cssmap);
+
+
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '18px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to change the map';
+        var controlDiv = document.createElement('div');
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '14px';
+        controlText.style.lineHeight = '25px';
+        controlText.style.paddingLeft = '3px';
+        controlText.style.paddingRight = '3px';
+        controlText.innerHTML = 'Hotspots/Charge Stations';
+        controlUI.appendChild(controlText);
+
+        var markersA = [];
+        var markersB = [];
+        var locationsA = [];
+        var locationsB = [];
+        var map;
+        var markerClusterA;
+        var markerClusterB;
+
+        function addMarker(location, namestr, Address, image, s) {
+            var marker = new google.maps.Marker({
+                position: location,
+                icon: image,
+                title: namestr,
+                map: map
+            });
+            //+'<div style="word-break: keep-all;">' 
+            var contentString =
+                '<div id="content">' + '<div id="siteNotice">' + '</div>' +
+                '<h2 id="firstHeading" class="firstHeading">' + namestr + '</h2>' +
+                '<div id="bodyContent">' + Address + '</div>' +
+                '</div>';
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString,
+            });
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+            });
+            if (s == 1)
+                markersA.push(marker);
+            else if (s == 2)
+                markersB.push(marker);
+        }
+
+        function locpush(loc, s) {
+            if (s == 1)
+                locationsA.push(loc);
+            else if (s == 2)
+                locationsB.push(loc);
+        }
+
+        function readcsv1(image, map) {
+            d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
+                .row(function (d) {
+                    return {
+                        LAT: +d.LAT,
+                        LNG: +d.LNG,
+                        Address: d.address,
+                        Name: d.name
+                    }
+                })
+                .get(function (error, csv) {
+                    if (!error) {
+
+                        var locpre = { lat: null, lng: null };
+                        csv.forEach(function (d) {
+                            var location = { lat: d.LAT, lng: d.LNG };
+                            var check = 0;
+
+                            if ((location.lat == locpre.lat) && (location.lng == locpre.lng)) {
+                                check = 1;
+                            };
+
+                            var s = 1;
+                            if (check == 0) {
+
+                                addMarker(location, d.Name, d.Address, image, s);
+                                locpre = location;
+                            };
+                        });
+                    }
+                    else {
+                        alert("ERROR");
+                    }
+
+                    setMapnull();
+                });
+        }
+
+        function readcsv2(image) {
+            d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list.csv")
+                .row(function (d) {
+                    return {
+                        LAT: +d.LAT,
+                        LNG: +d.LNG,
+                        Address: d.address,
+                        Name: d.name
+                    }
+                })
+                .get(function (error, csv) {
+                    if (!error) {
+                        //var locpre = { lat: null, lng: null };
+                        csv.forEach(function (d) {
+                            var location = { lat: d.LAT, lng: d.LNG };
+                            var check = 0;
+                            for (var i = 0; i < locationsB.length; i++) {
+                                if ((location.lat == locationsB[i].lat) && (location.lng == locationsB[i].lng)) { check = 1; }
+                            };
+                            var s = 2;
+                            if (check == 0) {
+                                addMarker(location, d.Name, d.Address, image, s);
+                                locpush(location, s)
+                                //locpre = location;
+                            };
+
+                        });
+                    }
+                    else {
+                        alert("ERROR");
+                    }
+                    setMapnull();
+
+                });
+        }
+        function setMapnull() {
+            for (var i = 0; i < markersA.length; i++) {
+                markersA[i].setMap(null);
+            }
+            for (var i = 0; i < markersB.length; i++) {
+                markersB[i].setMap(null);
+            }
+        }
+
+        function cSearchBox() {
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            var markers1 = [];
+            // [START region_getplaces]
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers1.forEach(function (marker1) {
+                    marker1.setMap(null);
+                });
+                markers1 = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers1.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        };
+
+        var BOX = 1;
+
+
+        function initMap() {
+            // Setup the click event listeners: simply set the map to Chicago.
+
+            var mapstate = 1;
+            controlUI.addEventListener('click', function () {
+
+                if (mapstate == 1) {
+
+
+                    mapstate = 2;
+                    markerClusterB = new MarkerClusterer(map, markersB,
+                        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+                    // alert("You're going to the charge stations map.");
+                }
+                else if (mapstate == 2) {
+                    markerClusterB.clearMarkers();
+                    mapstate = 3;
+                    markerClusterA = new MarkerClusterer(map, markersA,
+                        { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+                    //alert("You're going to the hotsopts(iTaiwan) map.");
+                }
+                else if (mapstate == 3) {
+                    markerClusterA.clearMarkers();
+                    mapstate = 1;
+                    //alert("You're going to the original map.");
+                };
+
+            });
+
+
+
+            var customMapType1 = new google.maps.StyledMapType(a_styles, {
+                name: '簡化地圖(鐵灰)'
+            });
+            var customMapTypeId1 = 'custom_style1';
+
+            var customMapType2 = new google.maps.StyledMapType(d_styles, {
+                name: '簡化地圖(暖綠)'
+            });
+            var customMapTypeId2 = 'custom_style2';
+
+            var mapOptions = {
+                zoom: 6,
+                center: { lat: 23.80233, lng: 121.03276 },
+                mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId1, customMapTypeId2, google.maps.MapTypeId.SATELLITE]
+                }
+            };
+
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);  //增加按鈕
+
+            //設定地圖種類
+            map.mapTypes.set(customMapTypeId1, customMapType1);
+            map.mapTypes.set(customMapTypeId2, customMapType2);
+            map.setMapTypeId(customMapTypeId1);
+
+            var wifiimage = {
+                url: 'https://avmm9898.github.io/D3-goodman/iTaiwan.png',
+                size: new google.maps.Size(37, 29),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(18.5, 29)
+            };
+            var chargeimage = {
+                url: 'https://avmm9898.github.io/D3-goodman/power.png',
+                size: new google.maps.Size(30, 30),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(15, 30)
+            };
+
+
+
+            cSearchBox();
+
+
+            readcsv1(wifiimage, map);
+            readcsv2(chargeimage, map);
+            markerClusterA = new MarkerClusterer(map, markersA);
+            markerClusterB = new MarkerClusterer(map, markersB);
+
+        }
+
+
+
+
+    </script>
+
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcISkkQ5wBGvYLnEj9Xr5cIqpE0N1nitM&libraries=places&callback=initMap"
+    async defer></script>
+
+
+</body>
+
+</html>

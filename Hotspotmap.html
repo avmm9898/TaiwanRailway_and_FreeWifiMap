@@ -57,12 +57,11 @@
         margin: 0;
         padding: 0;
       }
-    </style>
-<style>
       #target {
         width: 345px;
       }
     </style>
+
 </head>
 
 <body>
@@ -361,7 +360,7 @@
     controlUI.style.borderRadius = '3px';
     controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
     controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '18px';
+    controlUI.style.marginBottom = '5px';
     controlUI.style.textAlign = 'center';
     controlUI.title = 'Click to change the map';
     var controlDiv = document.createElement('div');
@@ -380,22 +379,23 @@
 
     var markersA = [];
     var markersB = [];
-
-    
+    var locationsA = [];
+    var locationsB = [];
     var map;
     var markerClusterA;
     var markerClusterB;
 
-    function addMarker(location, Name, Address, image, s) {
+    function addMarker(location, namestr, Address, image, s) {
       var marker = new google.maps.Marker({
         position: location,
         icon: image,
-        title: Name,
+        title: namestr,
         map: map
       });
+      //+'<div style="word-break: keep-all;">' 
       var contentString =
         '<div id="content">' + '<div id="siteNotice">' + '</div>' +
-        '<h2 id="firstHeading" class="firstHeading">' + Name + '</h2>' +
+        '<h2 id="firstHeading" class="firstHeading">' + namestr + '</h2>' +
         '<div id="bodyContent">' + Address + '</div>' +
         '</div>';
       var infowindow = new google.maps.InfoWindow({
@@ -410,6 +410,12 @@
         markersB.push(marker);
     }
 
+    function locpush(loc, s) {
+      if (s == 1)
+        locationsA.push(loc);
+      else if (s == 2)
+        locationsB.push(loc);
+    }
 
     function readcsv1(image, map) {
       d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
@@ -423,19 +429,28 @@
         })
         .get(function (error, csv) {
           if (!error) {
-            //var markers = [];
-            // lets say you want to log all the temperatures to the console
 
+            var locpre = { lat: null, lng: null };
             csv.forEach(function (d) {
               var location = { lat: d.LAT, lng: d.LNG };
-              var s = 1;
-              addMarker(location, d.Name, d.Address, image, s);
+              var check = 0;
 
+              if ((location.lat == locpre.lat) && (location.lng == locpre.lng)) {
+                check = 1;
+              };
+
+              var s = 1;
+              if (check == 0) {
+
+                addMarker(location, d.Name, d.Address, image, s);
+                locpre = location;
+              };
             });
           }
           else {
             alert("ERROR");
           }
+
           setMapnull();
         });
     }
@@ -452,12 +467,20 @@
         })
         .get(function (error, csv) {
           if (!error) {
-            //var markers = [];
-            // lets say you want to log all the temperatures to the console
+            //var locpre = { lat: null, lng: null };
             csv.forEach(function (d) {
               var location = { lat: d.LAT, lng: d.LNG };
+              var check = 0;
+              for (var i = 0; i < locationsB.length; i++) {
+                if ((location.lat == locationsB[i].lat) && (location.lng == locationsB[i].lng)) { check = 1; }
+              };
               var s = 2;
-              addMarker(location, d.Name, d.Address, image, s);
+              if (check == 0) {
+                addMarker(location, d.Name, d.Address, image, s);
+                locpush(location, s)
+                //locpre = location;
+              };
+
             });
           }
           else {
@@ -538,17 +561,17 @@
 
     function initMap() {
       // Setup the click event listeners: simply set the map to Chicago.
-      var clearMarkerscount = 2;
+
       var mapstate = 1;
       controlUI.addEventListener('click', function () {
 
         if (mapstate == 1) {
-          
+
 
           mapstate = 2;
           markerClusterB = new MarkerClusterer(map, markersB,
             { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-         // alert("You're going to the charge stations map.");
+          // alert("You're going to the charge stations map.");
         }
         else if (mapstate == 2) {
           markerClusterB.clearMarkers();
@@ -560,7 +583,7 @@
         else if (mapstate == 3) {
           markerClusterA.clearMarkers();
           mapstate = 1;
-        //alert("You're going to the original map.");
+          //alert("You're going to the original map.");
         };
 
       });
@@ -582,11 +605,20 @@
         center: { lat: 23.80233, lng: 121.03276 },
         mapTypeControlOptions: {
           mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId1, customMapTypeId2, google.maps.MapTypeId.SATELLITE]
-        }
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_CENTER
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+          position: google.maps.ControlPosition.LEFT_CENTER
+        },
       };
 
       map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);  //增加按鈕
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);  //增加按鈕
 
       //設定地圖種類
       map.mapTypes.set(customMapTypeId1, customMapType1);
@@ -607,10 +639,10 @@
       };
 
 
-      
-        cSearchBox();
-      
-     
+
+      cSearchBox();
+
+
       readcsv1(wifiimage, map);
       readcsv2(chargeimage, map);
       markerClusterA = new MarkerClusterer(map, markersA);
