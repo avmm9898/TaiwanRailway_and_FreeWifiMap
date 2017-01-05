@@ -418,7 +418,7 @@
     }
 
     function readcsv1(image, map) {
-      d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist.csv")
+      d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist_s.csv")
         .row(function (d) {
           return {
             LAT: +d.LAT,
@@ -456,7 +456,7 @@
     }
 
     function readcsv2(image) {
-      d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list.csv")
+      d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list_s.csv")
         .row(function (d) {
           return {
             LAT: +d.LAT,
