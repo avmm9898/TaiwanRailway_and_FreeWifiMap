@@ -60,6 +60,17 @@
       #target {
         width: 345px;
       }
+
+      #info-box {
+        background-color: white;
+        border: 1px solid black;
+        bottom: 30px;
+        height: 20px;
+        padding: 10px;
+        position: absolute;
+        left: 30px;
+      }
+
     </style>
 
 </head>
@@ -67,6 +78,8 @@
 <body>
   <input id="pac-input" class="controls" type="text" placeholder="Search location">
   <div id="map"></div>
+  <div id="info-box">?</div>
+
   <script>
 
     var d_styles = [
@@ -361,14 +374,6 @@
         ]
       },
       {
-        "elementType": "labels",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
         "elementType": "labels.text.fill",
         "stylers": [
           {
@@ -413,18 +418,19 @@
       },
       {
         "featureType": "administrative.land_parcel",
-        "elementType": "labels.text.fill",
+        "elementType": "labels",
         "stylers": [
           {
-            "color": "#ae9e90"
+            "visibility": "off"
           }
         ]
       },
       {
-        "featureType": "administrative.neighborhood",
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
         "stylers": [
           {
-            "visibility": "off"
+            "color": "#ae9e90"
           }
         ]
       },
@@ -451,6 +457,15 @@
         "stylers": [
           {
             "color": "#dfd2ae"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
           }
         ]
       },
@@ -546,6 +561,15 @@
       },
       {
         "featureType": "road.local",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
         "elementType": "labels.text.fill",
         "stylers": [
           {
@@ -594,89 +618,6 @@
         "stylers": [
           {
             "color": "#dfd2ae"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "stylers": [
-          {
-            "visibility": "on"
-          },
-          {
-            "weight": 4
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "geometry.stroke",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "labels",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "labels.icon",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "labels.text",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station.rail",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-          {
-            "visibility": "on"
           }
         ]
       },
@@ -999,13 +940,17 @@
 
       map.data.setStyle(function (feature) {
         return /** @type {google.maps.Data.StyleOptions} */({
-          fillColor: 'green',
+          
           strokeWeight: 1,
           title: feature.getProperty('站名'),
           icon: TRAimage
         });
       });
 
+      map.data.addListener('mouseover', function (event) {
+        document.getElementById('info-box').textContent =
+          event.feature.getProperty('站名')+"/n"+event.feature.getProperty('電話');
+      });
 
 
 
