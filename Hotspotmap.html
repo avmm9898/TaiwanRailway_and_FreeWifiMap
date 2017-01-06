@@ -945,10 +945,26 @@
           strokeColor: 'red',
           strokeWeight: 3,
           title: feature.getProperty('站名'),
-          icon: TRAimage
+          icon: TRAimage,
+          strokeOpacity: 0.5
+          
         });
       });
+      //var set_data_visible = 0;
 
+      map.addListener('rightclick', function () {
+       /** if (set_data_visible == 0)
+          set_data_visible = 1;
+        else
+          set_data_visible = 0; */
+        map.data.setStyle(function (feature) {
+          if (maps.Data.StyleOptions.visible == false)
+            return /** @type {google.maps.Data.StyleOptions} */{ visible: true };
+          else
+            return /** @type {google.maps.Data.StyleOptions} */{ visible: false };
+        });
+
+      });
       map.data.addListener('mouseover', function (event) {
         document.getElementById('info-box').style = 'display:inline;'
         document.getElementById('info-box').textContent =
@@ -957,8 +973,6 @@
       map.data.addListener('mouseout', function (event) {
         document.getElementById('info-box').style = 'display:none;'
       });
-
-
 
       readcsv1(wifiimage, map);
       readcsv2(chargeimage, map);
