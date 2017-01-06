@@ -936,18 +936,18 @@
 
       cSearchBox();
 
-      map.data.loadGeoJson('./train_stations_railway.json');
+      map.data1.loadGeoJson('./train_stations_railway.json');
 
-      map.data.setStyle(function (feature) {
+      map.data1.setStyle(function (feature) {
         return /** @type {google.maps.Data.StyleOptions} */({
-          
+          strokeColor: 'res',
           strokeWeight: 1,
           title: feature.getProperty('站名'),
           icon: TRAimage
         });
       });
 
-      map.data.addListener('mouseover', function (event) {
+      map.data1.addListener('mouseover', function (event) {
         document.getElementById('info-box').textContent =
           event.feature.getProperty('站名')+"/n"+event.feature.getProperty('電話');
       });
