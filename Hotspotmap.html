@@ -955,7 +955,7 @@
       map.addListener('rightclick', function () {
         map.data.forEach(
           function (feature) {
-
+            alert(feature.getProperty('visible'));
             if (feature.getProperty('visible') == false)
               map.data.revertStyle();
             else
