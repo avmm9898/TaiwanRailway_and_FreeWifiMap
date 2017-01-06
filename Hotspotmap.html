@@ -650,12 +650,17 @@
 
       map.data.loadGeoJson('./train_stations.json');
 
-      map.data.setStyle({
-        fillColor: 'green',
-        strokeWeight: 1,
-        title: data.feature.getProperty('站名'),
-        icon: TRAimage
+      map.data.setStyle(function (feature) {
+        return /** @type {google.maps.Data.StyleOptions} */({
+          fillColor: 'green',
+          strokeWeight: 1,
+          title: data.feature.getProperty('站名'),
+          icon: TRAimage
+        });
       });
+
+
+
 
 
       readcsv1(wifiimage, map);
