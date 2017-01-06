@@ -953,7 +953,7 @@
       var set_data_visible = 0;
 
       map.addListener('rightclick', function () {
-        map.data.foreach(
+        map.data.forEach(
           function (feature) {
 
             if (feature.getProperty('visible') == false)
