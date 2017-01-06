@@ -956,7 +956,9 @@
            set_data_visible = 1;
          else
            set_data_visible = 0; */
-        if (map.data.style.visible == true) { map.data.overrideStyle({ visible: false }); }
+        if (map.data.style.visible == true) { 
+          map.data.revertStyle();
+          map.data.overrideStyle(map.data.feature ,{ visible: false }); }
 
         else
         { map.data.revertStyle(); }
