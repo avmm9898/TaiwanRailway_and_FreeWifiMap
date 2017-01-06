@@ -940,6 +940,7 @@
 
       map.data.loadGeoJson('./train_stations_railway.json');
 
+      var set_data_visible = true;
       map.data.setStyle(function (feature) {
         return /** @type {google.maps.Data.StyleOptions} */({
           strokeColor: 'red',
@@ -947,19 +948,23 @@
           title: feature.getProperty('站名'),
           icon: TRAimage,
           strokeOpacity: 0.5,
-          visible: true
+          visible: set_data_visible
         });
       });
-      var set_data_visible = 0;
+
 
       map.addListener('rightclick', function () {
         map.data.forEach(
           function (feature) {
-            alert(feature.getProperty('visible'));
-            if (feature.getProperty('visible') == false)
+
+            if (set_data_visible == false) {
               map.data.revertStyle();
-            else
+              set_data_visible = true;
+            }
+            else if ((set_data_visible == true)) {
               map.data.overrideStyle(feature, { visible: false });
+              set_data_visible = false;
+            };
           }
         );
 
