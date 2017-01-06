@@ -957,11 +957,12 @@
          else
            set_data_visible = 0; */
         if (map.data.style.visible == true) { 
+          alert("true-false");
           map.data.revertStyle();
           map.data.overrideStyle(map.data.feature ,{ visible: false }); }
 
         else
-        { map.data.revertStyle(); }
+        { alert("f-t");map.data.revertStyle(); }
 
         
 
