@@ -956,20 +956,21 @@
       map.addListener('rightclick', function () {
         map.data.forEach(
           function (feature) {
-
             if (set_data_visible == false) {
               map.data.revertStyle();
-              set_data_visible = true;
+
             }
             else if (set_data_visible == true) {
               map.data.overrideStyle(feature, { visible: false });
-              set_data_visible = false;
+
             };
           }
         );
 
-
-
+        if (set_data_visible == true)
+          set_data_visible = false;
+        else if (set_data_visible == false)
+          set_data_visible = true;
       });
       map.data.addListener('mouseover', function (event) {
         document.getElementById('info-box').style = 'display:inline;'
