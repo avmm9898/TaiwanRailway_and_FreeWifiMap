@@ -947,7 +947,6 @@
           title: feature.getProperty('站名'),
           icon: TRAimage,
           strokeOpacity: 0.5
-
         });
       });
       //var set_data_visible = 0;
@@ -959,9 +958,19 @@
           set_data_visible = 0; */
         map.data.setStyle(function (feature) {
           if (map.data.style.visible == false)
-            return /** @type {google.maps.Data.StyleOptions} */{ visible: true };
+            return /** @type {google.maps.Data.StyleOptions} */{ strokeColor: 'red',
+          strokeWeight: 3,
+          title: feature.getProperty('站名'),
+          icon: TRAimage,
+          strokeOpacity: 0.5,
+          visible: true };
           else if(map.data.style.visible == true)
-            return /** @type {google.maps.Data.StyleOptions} */{ visible: false };
+            return /** @type {google.maps.Data.StyleOptions} */{ strokeColor: 'red',
+          strokeWeight: 3,
+          title: feature.getProperty('站名'),
+          icon: TRAimage,
+          strokeOpacity: 0.5,
+          visible: false };
         });
 
       });
