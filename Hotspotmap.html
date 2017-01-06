@@ -947,24 +947,21 @@
           title: feature.getProperty('站名'),
           icon: TRAimage,
           strokeOpacity: 0.5,
-          visible: false
+          visible: true
         });
       });
       var set_data_visible = 0;
 
       map.addListener('rightclick', function () {
-         if (set_data_visible == 0)
-           set_data_visible = 1;
-         else
-           set_data_visible = 0; 
-        if (set_data_visible == 1) {
-          alert("true-false");
-          map.data.revertStyle();
-          map.data.overrideStyle(feature,{ visible: false });
-        }
+        map.data.foreach(
+          function (feature) {
 
-        else
-        { alert("f-t"); map.data.revertStyle(); }
+            if (feature.getProperty('visible') == false)
+              map.data.overrideStyle(feature, { visible: true });
+            else
+              map.data.overrideStyle(feature, { visible: false });
+          }
+        );
 
 
 
