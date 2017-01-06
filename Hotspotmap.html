@@ -637,6 +637,12 @@
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(15, 30)
       };
+      var TRAimage = {
+        url: 'https://avmm9898.github.io/D3-goodman/TRA_Logo.png',
+        size: new google.maps.Size(25, 25),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(12.5, 25)
+      };
 
 
 
@@ -647,7 +653,8 @@
       map.data.setStyle({
         fillColor: 'green',
         strokeWeight: 1,
-        title:feature.getProperty('站名')
+        title: data.feature.getProperty('站名'),
+        icon: TRAimage
       });
 
 
