@@ -936,9 +936,9 @@
 
       cSearchBox();
 
-      map.data1.loadGeoJson('./train_stations_railway.json');
+      map.data.loadGeoJson('./train_stations_railway.json');
 
-      map.data1.setStyle(function (feature) {
+      map.data.setStyle(function (feature) {
         return /** @type {google.maps.Data.StyleOptions} */({
           strokeColor: 'res',
           strokeWeight: 1,
@@ -947,11 +947,14 @@
         });
       });
 
-      map.data1.addListener('mouseover', function (event) {
+      map.data.addListener('mouseover', function (event) {
+        document.getElementById('info-box').style = 'display:inline;'
         document.getElementById('info-box').textContent =
-          event.feature.getProperty('站名')+"/n"+event.feature.getProperty('電話');
+          event.feature.getProperty('站名') + "\n" + event.feature.getProperty('電話');
       });
-
+      map.data.addListener('mouseout', function (event) {
+        document.getElementById('info-box').style = 'display:none;'
+      });
 
 
 
