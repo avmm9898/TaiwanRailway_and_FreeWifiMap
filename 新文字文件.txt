@@ -1,0 +1,22 @@
+map.data.setStyle(function (feature) {
+          if (map.data.style.visible == false) {
+            return /** @type {google.maps.Data.StyleOptions} */{
+              strokeColor: 'red',
+              strokeWeight: 3,
+              title: feature.getProperty('站名'),
+              icon: TRAimage,
+              strokeOpacity: 0.5,
+              visible: true
+            };
+          }
+          else if (map.data.style.visible == true) {
+            return /** @type {google.maps.Data.StyleOptions} */{
+              strokeColor: 'red',
+              strokeWeight: 3,
+              title: feature.getProperty('站名'),
+              icon: TRAimage,
+              strokeOpacity: 0.5,
+              visible: false
+            };
+          }
+        });
