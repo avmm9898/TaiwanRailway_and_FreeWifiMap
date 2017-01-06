@@ -80,7 +80,7 @@
 <body>
   <input id="pac-input" class="controls" type="text" placeholder="Search location">
   <div id="map"></div>
-  <div id="info-box">?</div>
+  <div id="info-box">在地圖任意處按下「滑鼠右鍵」可開關鐵路路線圖喔!</div>
 
   <script>
 
@@ -940,7 +940,7 @@
 
       map.data.loadGeoJson('./railway.json');
 
-      var set_data_visible = true;
+      var set_data_visible = false;
       map.data.setStyle(function (feature) {
         return /** @type {google.maps.Data.StyleOptions} */({
           strokeColor: 'red',
@@ -957,7 +957,7 @@
         map.data.forEach(
           function (feature) {
             if (set_data_visible == false) {
-              map.data.revertStyle();
+              map.data.overrideStyle(feature, { visible: true });
 
             }
             else if (set_data_visible == true) {
