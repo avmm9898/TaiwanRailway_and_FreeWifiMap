@@ -644,6 +644,13 @@
 
       map.data.loadGeoJson('./train_stations.json');
 
+      map.data.setStyle({
+        fillColor: 'green',
+        strokeWeight: 1,
+        title:feature.getProperty('站名')
+      });
+
+
       readcsv1(wifiimage, map);
       readcsv2(chargeimage, map);
       markerClusterA = new MarkerClusterer(map, markersA);
