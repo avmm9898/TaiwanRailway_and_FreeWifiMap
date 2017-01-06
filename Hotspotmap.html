@@ -960,7 +960,7 @@
         map.data.setStyle(function (feature) {
           if (map.data.style.visible == false)
             return /** @type {google.maps.Data.StyleOptions} */{ visible: true };
-          else
+          else if(map.data.style.visible == true)
             return /** @type {google.maps.Data.StyleOptions} */{ visible: false };
         });
 
