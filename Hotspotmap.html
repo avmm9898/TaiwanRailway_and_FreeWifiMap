@@ -950,22 +950,21 @@
           visible: true
         });
       });
-      //var set_data_visible = 0;
+      var set_data_visible = 0;
 
       map.addListener('rightclick', function () {
-        /** if (set_data_visible == 0)
+         if (set_data_visible == 0)
            set_data_visible = 1;
          else
-           set_data_visible = 0; */
-        var datastyle = map.data.getStyle();
-        if (datastyle.visible == true) {
+           set_data_visible = 0; 
+        if (set_data_visible == 1) {
           alert("true-false");
           map.data.revertStyle();
           map.data.overrideStyle(map.data.feature, { visible: false });
         }
 
         else
-        { alert(datastyle.visible); map.data.revertStyle(); }
+        { alert("f-t"); map.data.revertStyle(); }
 
 
 
