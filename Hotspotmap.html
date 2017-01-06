@@ -957,9 +957,9 @@
           function (feature) {
 
             if (feature.getProperty('visible') == false)
-              map.data.overrideStyle(feature, { visible: true });
-            else
               map.data.revertStyle();
+            else
+              map.data.overrideStyle(feature, { visible: false });
           }
         );
 
