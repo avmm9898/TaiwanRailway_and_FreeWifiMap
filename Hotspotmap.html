@@ -952,26 +952,16 @@
       //var set_data_visible = 0;
 
       map.addListener('rightclick', function () {
-       /** if (set_data_visible == 0)
-          set_data_visible = 1;
+        /** if (set_data_visible == 0)
+           set_data_visible = 1;
+         else
+           set_data_visible = 0; */
+        if (map.data.style.visible == true) { map.data.overrideStyle({ visible: false }); }
+
         else
-          set_data_visible = 0; */
-        map.data.setStyle(function (feature) {
-          if (map.data.style.visible == false)
-            return /** @type {google.maps.Data.StyleOptions} */{ strokeColor: 'red',
-          strokeWeight: 3,
-          title: feature.getProperty('站名'),
-          icon: TRAimage,
-          strokeOpacity: 0.5,
-          visible: true };
-          else if(map.data.style.visible == true)
-            return /** @type {google.maps.Data.StyleOptions} */{ strokeColor: 'red',
-          strokeWeight: 3,
-          title: feature.getProperty('站名'),
-          icon: TRAimage,
-          strokeOpacity: 0.5,
-          visible: false };
-        });
+        { map.data.revertStyle(); }
+
+        
 
       });
       map.data.addListener('mouseover', function (event) {
