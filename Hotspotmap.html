@@ -958,7 +958,7 @@
         else
           set_data_visible = 0; */
         map.data.setStyle(function (feature) {
-          if (map.Data.StyleOptions.visible == false)
+          if (map.data.style.visible == false)
             return /** @type {google.maps.Data.StyleOptions} */{ visible: true };
           else
             return /** @type {google.maps.Data.StyleOptions} */{ visible: false };
