@@ -709,7 +709,7 @@
     }
 
     function readcsv1(image, map) {
-      d3.csv("https://avmm9898.github.io/D3-goodman/hotspotlist_s.csv")
+      d3.csv("https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/hotspotlist_s.csv")
         .row(function (d) {
           return {
             LAT: +d.LAT,
@@ -747,7 +747,7 @@
     }
 
     function readcsv2(image) {
-      d3.csv("https://avmm9898.github.io/D3-goodman/charge_station_list_s.csv")
+      d3.csv("https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/charge_station_list_s.csv")
         .row(function (d) {
           return {
             LAT: +d.LAT,
@@ -917,19 +917,19 @@
       map.setMapTypeId(customMapTypeId1);
 
       var wifiimage = {
-        url: 'https://avmm9898.github.io/D3-goodman/iTaiwan.png',
+        url: 'https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/iTaiwan.png',
         size: new google.maps.Size(37, 29),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(18.5, 29)
       };
       var chargeimage = {
-        url: 'https://avmm9898.github.io/D3-goodman/power.png',
+        url: 'https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/power.png',
         size: new google.maps.Size(30, 30),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(15, 30)
       };
       var TRAimage = {
-        url: 'https://avmm9898.github.io/D3-goodman/TRA_Logo.png',
+        url: 'https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/TRA_Logo.png',
         size: new google.maps.Size(25, 25),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(12.5, 25)
