@@ -7,67 +7,75 @@
   <title>台灣充電站及公共WIFI地圖</title>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
-      /* Always set the map height explicitly to define the size of the div
+    /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 100%;
-      }.controls {
-        margin-top: 10px;
-        border: 1px solid transparent;
-      border-radius: 2px 0 0 2px;
+    #map {
+      height: 100%;
+    }
+
+    .controls {
+      margin-top: 10px;
+      border: 2px solid transparent;
+      border-radius: 2px;
       box-sizing: border-box;
       -moz-box-sizing: border-box;
-      height: 29px;
+      height: 40px;
       outline: none;
+      font-family: 'Roboto,Arial,sans-serif';
+      font-size: '24px';
+      line-height: '25px';
+      padding: '5px 10px 5px 10px ';
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
+    }
 
-      #pac-input {
+    #pac-input {
       background-color: #fff;
-      font-family: Roboto;
-      font-size: 15px;
-      font-weight: 300;
-      margin-left: 10px;
-      padding: 0 10px 0 10px;
+      font-family: 'Roboto,Arial,sans-serif';
+      font-size: '24px';
+      line-height: '25px';
+      padding: '5px 10px 5px 10px ';
       text-overflow: ellipsis;
-      width: 200px;
-      }
+      text-align: center;
+      width: 300px;
+    }
 
-      #pac-input:focus {
+    #pac-input:focus {
       border-color: #4d90fe;
-      }.pac-container {
+    }
+
+    .pac-container {
       font-family: Roboto;
-      }
+    }
 
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #target {
-        width: 345px;
-      }
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
 
-      #info-box {
-        background-color: #fff;
-        border: 1px solid #fff;
-        bottom: 30px;
-        right: 5px;
-        height: 20px;
-        padding: 5px;
-        position: absolute;
-        cursor : pointer;
-        border-radius: 2px;
-        box-shadow: 0 2px 6px rgba(0,0,0,.3);
-      }
+    #target {
+      width: 345px;
+    }
 
-    </style>
+    #info-box {
+      background-color: #fff;
+      border: 5px solid #fff;
+      bottom: 30px;
+      right: 5px;
+      padding: 5px;
+      position: absolute;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+    }
+  </style>
 
 </head>
 
 <body>
-  <input id="pac-input" class="controls" type="text" placeholder="Search location">
+  <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
   <div id="map"></div>
   <div id="info-box">地圖任意處按下「滑鼠右鍵」開關鐵路路線圖</div>
 
@@ -642,7 +650,7 @@
     controlUI.style.marginBottom = '0px';
     controlUI.style.marginLeft = '10px';
     controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to change the map';
+    controlUI.title = '點擊切換';
     var controlDiv = document.createElement('div');
     controlDiv.appendChild(controlUI);
 
@@ -650,11 +658,11 @@
     var controlText = document.createElement('div');
     controlText.style.color = 'rgb(25,25,25)';
     controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '14px';
+    controlText.style.fontSize = '18px';
     controlText.style.lineHeight = '25px';
     controlText.style.paddingLeft = '3px';
     controlText.style.paddingRight = '3px';
-    controlText.style.height='30px'
+    controlText.style.padding = '5px 10px 5px 10px '
     controlText.innerHTML = '(切換顯示)免費充電站/免費Wifi';
     controlUI.appendChild(controlText);
 
@@ -870,22 +878,16 @@
       });
 
 
-
-      var customMapType1 = new google.maps.StyledMapType(a_styles, {
-        name: '簡化地圖'
+      var SimpleMapType = new google.maps.StyledMapType(onlytrain_style, {
+        name: '隱藏所有地標'
       });
-      var customMapTypeId1 = 'custom_style1';
-
-      var customMapType2 = new google.maps.StyledMapType(onlytrain_style, {
-        name: '隱藏所有標籤'
-      });
-      var customMapTypeId2 = 'custom_style2';
+      var SimpleMapTypeId = 'simple_style';
 
       var mapOptions = {
         zoom: 6,
         center: { lat: 23.80233, lng: 121.03276 },  //台灣本島中心:{ lat: 23.80233, lng: 121.03276 }
         mapTypeControlOptions: {
-          mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId1, customMapTypeId2, google.maps.MapTypeId.SATELLITE]
+          mapTypeIds: [google.maps.MapTypeId.ROADMAP, SimpleMapTypeId, , google.maps.MapTypeId.SATELLITE],
         },
         zoomControl: true,
         zoomControlOptions: {
@@ -902,9 +904,8 @@
       map.controls[google.maps.ControlPosition.LEFT_TOP].push(controlDiv);  //增加按鈕
 
       //設定地圖種類
-      map.mapTypes.set(customMapTypeId1, customMapType1);
-      map.mapTypes.set(customMapTypeId2, customMapType2);
-      map.setMapTypeId(customMapTypeId1);
+      map.mapTypes.set(SimpleMapTypeId, SimpleMapType);
+      map.setMapTypeId(SimpleMapTypeId);
 
       var wifiimage = {
         url: 'https://avmm9898.github.io/Taiwan-Railway-and-Free-Wifi-Map/iTaiwan.png',
@@ -984,10 +985,12 @@
 
   </script>
 
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+  <script
+    src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlejHc5H0KPUXMwhhCnPgflpE06z9GPp8&libraries=places&callback=initMap"
-  async defer></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlejHc5H0KPUXMwhhCnPgflpE06z9GPp8&libraries=places&callback=initMap"
+    async defer></script>
 
 
 </body>
