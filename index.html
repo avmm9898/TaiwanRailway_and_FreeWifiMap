@@ -27,8 +27,8 @@
       font-family: Roboto;
       font-size: 15px;
       font-weight: 300;
-      margin-left: 12px;
-      padding: 0 11px 0 13px;
+      margin-left: 10px;
+      padding: 0 10px 0 10px;
       text-overflow: ellipsis;
       width: 200px;
       }
@@ -37,18 +37,6 @@
       border-color: #4d90fe;
       }.pac-container {
       font-family: Roboto;
-      }
-
-      #type-selector {
-      color: #fff;
-      background-color: #4d90fe;
-      padding: 5px 11px 0px 11px;
-      }
-
-      #type-selector label {
-      font-family: Roboto;
-      font-size: 13px;
-      font-weight: 300;
       }
 
       /* Optional: Makes the sample page fill the window. */
@@ -70,6 +58,7 @@
         padding: 5px;
         position: absolute;
         cursor : pointer;
+        border-radius: 2px;
         box-shadow: 0 2px 6px rgba(0,0,0,.3);
       }
 
@@ -80,7 +69,7 @@
 <body>
   <input id="pac-input" class="controls" type="text" placeholder="Search location">
   <div id="map"></div>
-  <div id="info-box">在地圖任意處按下「滑鼠右鍵」可開關鐵路路線圖喔!</div>
+  <div id="info-box">地圖任意處按下「滑鼠右鍵」開關鐵路路線圖</div>
 
   <script>
 
@@ -665,7 +654,7 @@
     controlText.style.lineHeight = '25px';
     controlText.style.paddingLeft = '3px';
     controlText.style.paddingRight = '3px';
-    controlText.innerHTML = 'Charge Stations/Hotspots';
+    controlText.innerHTML = '(切換顯示)免費充電站/免費Wifi';
     controlUI.appendChild(controlText);
 
     var markersA = [];
