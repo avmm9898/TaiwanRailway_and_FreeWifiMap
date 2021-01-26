@@ -4,4 +4,6 @@
 
 ### 提供給環島旅人快速便捷的 Free Wifi 查詢
 
-### This is a final project of D3.js class.
+Using:Google map API, html, javascript
+
+This is a final project of D3.js class.
